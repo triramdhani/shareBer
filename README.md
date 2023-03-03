@@ -7,3 +7,11 @@
 # How to clone 
 1. clone this repo 
 2. pnpm install 
+
+# how to lint ? 
+pnpm lint
+
+#how to commit
+1. git add .
+2. pnpm commit
+3. push
