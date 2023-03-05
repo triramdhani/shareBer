@@ -4,14 +4,17 @@
 2. css with tailwindcss
 3. eslint + pretier + husky + commitizen
 
-# How to clone 
-1. clone this repo 
-2. pnpm install 
+# How to clone
 
-# how to lint ? 
+1. clone this repo
+2. pnpm install
+
+# how to lint ?
+
 pnpm lint
 
 #how to commit
+
 1. git add .
 2. pnpm commit
 3. push
