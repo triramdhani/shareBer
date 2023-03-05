@@ -2,6 +2,12 @@
   "name": "next-starterkit",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=14.0.0",
+    "pnpm": ">=7.26.3",
+    "npm": "please-use-pnpm"
+  },
+
   "scripts": {
     "postinstall": "husky install",
     "commit": "cz",
