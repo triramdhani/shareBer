@@ -3,13 +3,14 @@ import { NAV_LIST } from '../data'
 
 const Sidebar = () => {
   return (
-    <div className='w-2/12 bg-green-400 sticky h-[80vh] top-20'>
+    <div className='fixed h-full pt-5 px-4 '>
       {NAV_LIST.map((item) => {
-        return (
-          <div key={item.name} className='mb-2'>
-            <Link href={item.path}>{item.name}</Link>
-          </div>
-        )
+        if (item.isProtected === true)
+          return (
+            <div key={item.name} className='my-4 px-6'>
+              <Link href={item.path}>{item.name}</Link>
+            </div>
+          )
       })}
     </div>
   )

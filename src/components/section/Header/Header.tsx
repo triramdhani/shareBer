@@ -1,8 +1,10 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { NAV_LIST } from '../data'
 import GetSize from '@/hooks/GetSize'
+import { useRouter } from 'next/router'
+import TopHeader from './TopHeader'
+import NavChild from './NavBar'
 
 function Header() {
   const [isOpenNav, setIsOpeNav] = useState(false)
@@ -10,18 +12,28 @@ function Header() {
     setIsOpeNav(!isOpenNav)
   }
   const width = GetSize()
+  const router = useRouter()
 
+  const isUserPage = router.pathname === '/user'
+  console.log(router.pathname)
+  const user = 'Tri'
+  if (isUserPage) {
+    return (
+      <TopHeader handleMenuClick={handleMenuClick}>
+        <div className='hidden md:flex'>
+          <span>Hallo, {user}!!</span>
+          <button>Logout</button>
+        </div>
+        {isOpenNav ? (
+          <div className='md:hidden'>
+            <NavBar setIsOpenNav={setIsOpeNav} />
+          </div>
+        ) : null}
+      </TopHeader>
+    )
+  }
   return (
-    <div className='py-4 md:flex justify-between'>
-      <div className='flex justify-between sticky top-0'>
-        <Link href={'/'}>
-          <Image src='' alt='' />
-          <h1>easyShare</h1>
-        </Link>
-        <span className='cursor-pointer md:hidden' onClick={handleMenuClick}>
-          Menu
-        </span>
-      </div>
+    <TopHeader handleMenuClick={handleMenuClick}>
       {isOpenNav ? (
         <div>
           <NavBar setIsOpenNav={setIsOpeNav} />
@@ -32,7 +44,7 @@ function Header() {
           <NavBar setIsOpenNav={setIsOpeNav} />
         </div>
       )}
-    </div>
+    </TopHeader>
   )
 }
 
@@ -40,25 +52,37 @@ interface INavBar {
   setIsOpenNav: Dispatch<SetStateAction<boolean>>
 }
 const NavBar = ({ setIsOpenNav }: INavBar) => {
-  const handleCLoseNav = () => {
+  const handleCLoseNav = (): void => {
     setIsOpenNav((prev) => !prev)
   }
+  const router = useRouter()
+  const isUserPage = router.pathname === '/user'
+
+  if (isUserPage) {
+    return (
+      <NavChild handleCloseNav={handleCLoseNav}>
+        {NAV_LIST.map((item) => {
+          if (item.isProtected === true)
+            return (
+              <div key={item.name} className='mb-2 px-2 text-white text-inherit'>
+                <Link href={item.path}>{item.name}</Link>
+              </div>
+            )
+        })}
+      </NavChild>
+    )
+  }
   return (
-    <div className='absolute w-6/12 h-full pt-10 px-4 top-0 left-0 bg-blue-300 z-20 md:flex md:relative md:p-0 md:w-full md:bg-inherit '>
-      <span className='absolute top-0 right-2 md:hidden' onClick={handleCLoseNav}>
-        X
-      </span>
-      <div className='px-2 text-black hidden md:block lg:block'>
-        <Link href={'/'}>Upload</Link>
-      </div>
+    <NavChild handleCloseNav={handleCLoseNav}>
       {NAV_LIST.map((item) => {
-        return (
-          <div key={item.name} className='mb-2 px-2 text-white text-inherit'>
-            <Link href={item.path}>{item.name}</Link>
-          </div>
-        )
+        if (item.isProtected === false)
+          return (
+            <div key={item.name} className='mb-2 px-2 text-white text-inherit'>
+              <Link href={item.path}>{item.name}</Link>
+            </div>
+          )
       })}
-    </div>
+    </NavChild>
   )
 }
 export default Header
