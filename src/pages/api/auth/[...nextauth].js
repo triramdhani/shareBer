@@ -14,6 +14,7 @@ export default NextAuth({
       }
     })
     // Passwordless / email sign in
-  ]
+  ],
+  debug: true
   // useSecureCookies: false,
 })
