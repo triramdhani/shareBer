@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'MyFont';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''), url('/fonts/MY-FONT.woff') format('woff');
+}
