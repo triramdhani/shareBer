@@ -7,7 +7,8 @@ export interface IPrimarylayout {
 const PrimaryLayout = ({ children }: IPrimarylayout) => {
   return (
     <>
-      <div className=''>{children}</div>
+      {children}
+      {/* <main className=''>{children}</main> */}
     </>
   )
 }

@@ -1,9 +1,16 @@
 import PrimaryLayout from '@/components/layouts/primary/PrimaryLayout'
 import Header from '@/components/section/Header/Header'
 import Head from 'next/head'
+import { createRef, useState } from 'react'
 import { NextPageWithLayout } from './page'
 
 const Home: NextPageWithLayout = () => {
+  const inputRef = createRef<HTMLInputElement>()
+  const [fileValue, setFileValue] = useState('')
+  const handleInput = async (e: any) => {
+    e.preventDefault()
+    console.log(fileValue)
+  }
   return (
     <>
       <Head>
@@ -12,7 +19,23 @@ const Home: NextPageWithLayout = () => {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className=' flex justify-center '>lorem1000</div>
+      <main className=' flex justify-center '>
+        <div className='px-3 py-6 mt-6 border border-dotted border-slate-600 rounded'>
+          <form action='' onSubmit={handleInput} className='text-center'>
+            <input
+              type='file'
+              name='file'
+              id='file'
+              ref={inputRef}
+              onChange={(e) => setFileValue(e.currentTarget.value)}
+            />
+            <br />
+            <button type='submit' className='border px-3 py-1 mt-2 rounded bg-blue-500 text-white'>
+              Upload
+            </button>
+          </form>
+        </div>
+      </main>
     </>
   )
 }
