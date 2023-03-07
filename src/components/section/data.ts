@@ -1,20 +1,26 @@
 export const NAV_LIST = [
   {
+    name: 'Upload',
+    icon: '',
+    path: '/',
+    isProtected: false
+  },
+  {
     name: 'Latest Upload',
     icon: '',
-    path: '/upload',
+    path: '/Upload',
     isProtected: false
   },
   {
     name: 'Popular Files',
     icon: '',
-    path: '/popular',
+    path: '/Popular',
     isProtected: false
   },
   {
-    name: 'Popular Config',
+    name: 'Koleksi Config',
     icon: '',
-    path: '/popular',
+    path: '/Koleksi',
     isProtected: false
   },
   {

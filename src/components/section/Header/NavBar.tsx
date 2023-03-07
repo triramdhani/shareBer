@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { ReactNode } from 'react'
 
 interface INavChild {
@@ -8,13 +7,10 @@ interface INavChild {
 
 const NavChild = ({ children, handleCloseNav }: INavChild) => {
   return (
-    <nav className='absolute w-6/12 h-full pt-10 px-4 top-0 left-0 bg-blue-300 z-20 md:flex md:relative md:p-0 md:w-full md:bg-inherit '>
+    <nav className='absolute w-6/12 h-screen pt-10 px-4 top-0 left-0 text-slate-600 font-medium bg-blue-300 z-20 md:flex md:h-full md:relative md:p-0 md:w-full md:bg-inherit '>
       <span className='absolute top-0 right-2 md:hidden' onClick={handleCloseNav}>
         X
       </span>
-      <div className='px-2 text-black hidden md:block lg:block'>
-        <Link href={'/'}>Upload</Link>
-      </div>
       {children}
     </nav>
   )

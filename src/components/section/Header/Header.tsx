@@ -64,7 +64,7 @@ const NavBar = ({ setIsOpenNav }: INavBar) => {
         {NAV_LIST.map((item) => {
           if (item.isProtected === true)
             return (
-              <div key={item.name} className='mb-2 px-2 text-white text-inherit'>
+              <div key={item.name} className='mb-2 px-2 text-inherit'>
                 <Link href={item.path}>{item.name}</Link>
               </div>
             )
@@ -77,7 +77,7 @@ const NavBar = ({ setIsOpenNav }: INavBar) => {
       {NAV_LIST.map((item) => {
         if (item.isProtected === false)
           return (
-            <div key={item.name} className='mb-2 px-2 text-white text-inherit'>
+            <div key={item.name} className='mb-2 px-2 text-inherit'>
               <Link href={item.path}>{item.name}</Link>
             </div>
           )

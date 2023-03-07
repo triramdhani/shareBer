@@ -3,13 +3,31 @@ import Header from '@/components/section/Header/Header'
 import Head from 'next/head'
 import { createRef, useState } from 'react'
 import { NextPageWithLayout } from './page'
+import { generateId } from '../../utils/generateId'
+import { format } from 'date-fns'
+import Link from 'next/link'
+
+const HOST_URL = 'http://localhost:3000'
 
 const Home: NextPageWithLayout = () => {
   const inputRef = createRef<HTMLInputElement>()
   const [fileValue, setFileValue] = useState('')
+  const [newFile, setNewFile] = useState('')
+  const [succes, setSucces] = useState(false)
+
   const handleInput = async (e: any) => {
     e.preventDefault()
-    console.log(fileValue)
+    try {
+      const createdDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss')
+      const fileId = await generateId()
+      const fileData = fileValue
+      setNewFile(fileId)
+      setSucces(true)
+      setFileValue('')
+      console.log(fileData, fileId, createdDate)
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <>
@@ -19,22 +37,44 @@ const Home: NextPageWithLayout = () => {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main className=' flex justify-center '>
-        <div className='px-3 py-6 mt-6 border border-dotted border-slate-600 rounded'>
+      <main className='py-10 text-center'>
+        <p>File maximum size 1Mb</p>
+        <div className='px-3 py-6 mt-1 w-8/12 m-auto md:w-4/12 border border-dashed border-slate-600 rounded'>
           <form action='' onSubmit={handleInput} className='text-center'>
             <input
               type='file'
               name='file'
               id='file'
               ref={inputRef}
+              value={fileValue}
               onChange={(e) => setFileValue(e.currentTarget.value)}
+              className='w-full overflow-hidden'
             />
             <br />
-            <button type='submit' className='border px-3 py-1 mt-2 rounded bg-blue-500 text-white'>
+            <button
+              type='submit'
+              className='border px-3 py-1 mt-2 rounded bg-blue-500 text-white'
+              disabled={fileValue === '' ? true : false}
+            >
               Upload
             </button>
           </form>
         </div>
+        <p>{}</p>
+        {succes ? (
+          <div className='w-10/12 mt-3 py-4 border rounded m-auto'>
+            <p>File has been Uploaded successfully!</p>
+            <Link href={`/${newFile}`}>Go to File</Link> <br />
+            <textarea
+              name='newFile'
+              id='newFile'
+              rows={1}
+              value={`${HOST_URL}/${newFile}`}
+              onChange={() => setSucces(true)}
+              className='text-xs w-8/12 m:w-3/12 lg:w-3/12 px-2 py-1'
+            ></textarea>
+          </div>
+        ) : null}
       </main>
     </>
   )
