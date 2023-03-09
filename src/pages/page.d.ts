@@ -5,3 +5,5 @@ export type NextPageWithLayout<P = {}> = NextPage<P> & {
   getLayout?: (_page: ReactElement) => ReactNode
   layout?: ComponentType
 }
+
+export type IFileDownload = {}

@@ -1,34 +1,79 @@
 import PrimaryLayout from '@/components/layouts/primary/PrimaryLayout'
 import Header from '@/components/section/Header/Header'
 import Head from 'next/head'
-import { createRef, useState } from 'react'
+import { ChangeEvent, createRef, useState } from 'react'
 import { NextPageWithLayout } from './page'
 import { generateId } from '../../utils/generateId'
-import { format } from 'date-fns'
 import Link from 'next/link'
+// import axios from 'axios'
+// import { PostUploadFile } from '../../lib/api'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { firebase } from '../../lib/firebase'
+import { AddPublicFile } from '../../lib/model'
+import { format } from 'date-fns'
 
+const berkas = getStorage(firebase)
 const HOST_URL = 'http://localhost:3000'
 
 const Home: NextPageWithLayout = () => {
   const inputRef = createRef<HTMLInputElement>()
-  const [fileValue, setFileValue] = useState('')
-  const [newFile, setNewFile] = useState('')
+  const [fileValue, setFileValue] = useState('') // from input
+  const [newFileId, setNewFileId] = useState('') //fileid
   const [succes, setSucces] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
 
-  const handleInput = async (e: any) => {
+  const PostUploadFile = async (file: any, fileId: string) => {
+    console.log('upload file start')
+    const createdDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss')
+    const fileUrlPage = `${HOST_URL}/${fileId}`
+    const storageRef = ref(berkas, `config/${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file)
+    console.log('finish upload')
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+        // setProgresspercent(progress);
+      },
+      (error) => {
+        alert(error)
+      },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          return downloadURL
+        })
+        console.log(url)
+        AddPublicFile(fileId, createdDate, fileUrlPage, url)
+      }
+    )
+  }
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFileValue(e.currentTarget.value) // for input value
+    const files = e.currentTarget.files
+    setFile(files!.item(0)) // store files api to state
+    setSucces(false) //if file changed succes should false
+  }
+  const cleanState = () => {
+    setFile(null)
+    setFileValue('')
+  }
+  const handleUploadButton = async (e: any) => {
     e.preventDefault()
     try {
-      const createdDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss')
-      const fileId = await generateId()
-      const fileData = fileValue
-      setNewFile(fileId)
-      setSucces(true)
-      setFileValue('')
-      console.log(fileData, fileId, createdDate)
+      const fileId = generateId()
+      setNewFileId(fileId)
+      PostUploadFile(file, fileId)
+      setTimeout(() => {
+        setSucces(true)
+        cleanState()
+      }, 1000)
     } catch (err) {
       console.log(err)
     }
   }
+
   return (
     <>
       <Head>
@@ -40,14 +85,14 @@ const Home: NextPageWithLayout = () => {
       <main className='py-10 text-center'>
         <p>File maximum size 1Mb</p>
         <div className='px-3 py-6 mt-1 w-8/12 m-auto md:w-4/12 border border-dashed border-slate-600 rounded'>
-          <form action='' onSubmit={handleInput} className='text-center'>
+          <form action='' onSubmit={handleUploadButton} className='text-center'>
             <input
               type='file'
               name='file'
               id='file'
               ref={inputRef}
               value={fileValue}
-              onChange={(e) => setFileValue(e.currentTarget.value)}
+              onChange={handleFileChange}
               className='w-full overflow-hidden'
             />
             <br />
@@ -64,12 +109,12 @@ const Home: NextPageWithLayout = () => {
         {succes ? (
           <div className='w-10/12 mt-3 py-4 border rounded m-auto'>
             <p>File has been Uploaded successfully!</p>
-            <Link href={`/${newFile}`}>Go to File</Link> <br />
+            <Link href={`/${newFileId}`}>Go to File</Link> <br />
             <textarea
               name='newFile'
               id='newFile'
               rows={1}
-              value={`${HOST_URL}/${newFile}`}
+              value={`${HOST_URL}/${newFileId}`}
               onChange={() => setSucces(true)}
               className='text-xs w-8/12 m:w-3/12 lg:w-3/12 px-2 py-1'
             ></textarea>
