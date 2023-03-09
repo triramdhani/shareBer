@@ -5,15 +5,13 @@ import { ChangeEvent, createRef, useState } from 'react'
 import { NextPageWithLayout } from './page'
 import { generateId } from '../../utils/generateId'
 import Link from 'next/link'
-// import axios from 'axios'
-// import { PostUploadFile } from '../../lib/api'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { firebase } from '../../lib/firebase'
 import { AddPublicFile } from '../../lib/model'
 import { format } from 'date-fns'
 
 const berkas = getStorage(firebase)
-const HOST_URL = 'http://localhost:3000'
+const HOST_URL = process.env.NEXT_PUBLIC_HOST
 
 const Home: NextPageWithLayout = () => {
   const inputRef = createRef<HTMLInputElement>()
@@ -44,8 +42,7 @@ const Home: NextPageWithLayout = () => {
         const url = await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           return downloadURL
         })
-        console.log(url)
-        AddPublicFile(fileId, createdDate, fileUrlPage, url, fileName)
+        AddPublicFile(fileId, createdDate, fileUrlPage, url, fileName, file)
         setSucces(true)
       }
     )
@@ -119,6 +116,7 @@ const Home: NextPageWithLayout = () => {
               onChange={() => setSucces(true)}
               className='text-xs w-8/12 m:w-3/12 lg:w-3/12 px-2 py-1'
             ></textarea>
+            <p className='text-red-800 font-semibold text-[12px]'>Make sure you saved your link!!</p>
           </div>
         ) : null}
       </main>

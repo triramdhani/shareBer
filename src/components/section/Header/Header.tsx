@@ -15,7 +15,6 @@ function Header() {
   const router = useRouter()
 
   const isUserPage = router.pathname === '/user'
-  console.log(router.pathname)
   const user = 'Tri'
   if (isUserPage) {
     return (

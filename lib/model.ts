@@ -12,15 +12,18 @@ export const AddPublicFile = async (
   createdDate: string,
   fileUrlPage: string,
   liveUrl: string,
-  fileName: string
+  fileName: string,
+  file: File
 ) => {
   console.log('start create data')
   await setDoc(doc(db, 'config', fileId), {
-    fileName: fileName,
+    fileName: file.name,
     fileId: fileId,
     createdAt: createdDate,
     storageUrl: liveUrl,
-    urlFile: fileUrlPage
+    urlFile: fileUrlPage,
+    fileType: file.type,
+    fileSize: file.size
   })
   console.log('succesful!!')
 }

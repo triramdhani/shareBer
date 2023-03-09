@@ -11,4 +11,7 @@ export type GetFileProp = {
   fileId: string
   storageUrl: string
   urlFile: string
+  fileName: string
+  fileType: string
+  fileSize: number
 }
