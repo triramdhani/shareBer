@@ -7,9 +7,16 @@ import { db } from './firebase'
 //   urlFile : string
 // }
 
-export const AddPublicFile = async (fileId: string, createdDate: string, fileUrlPage: string, liveUrl: string) => {
+export const AddPublicFile = async (
+  fileId: string,
+  createdDate: string,
+  fileUrlPage: string,
+  liveUrl: string,
+  fileName: string
+) => {
   console.log('start create data')
   await setDoc(doc(db, 'config', fileId), {
+    fileName: fileName,
     fileId: fileId,
     createdAt: createdDate,
     storageUrl: liveUrl,

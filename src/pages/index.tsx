@@ -27,6 +27,7 @@ const Home: NextPageWithLayout = () => {
     const createdDate = format(new Date(), 'dd/MM/yyyy HH:mm:ss')
     const fileUrlPage = `${HOST_URL}/${fileId}`
     const storageRef = ref(berkas, `config/${file.name}`)
+    const fileName = file.name
     const uploadTask = uploadBytesResumable(storageRef, file)
     console.log('finish upload')
 
@@ -44,7 +45,8 @@ const Home: NextPageWithLayout = () => {
           return downloadURL
         })
         console.log(url)
-        AddPublicFile(fileId, createdDate, fileUrlPage, url)
+        AddPublicFile(fileId, createdDate, fileUrlPage, url, fileName)
+        setSucces(true)
       }
     )
   }
@@ -66,7 +68,6 @@ const Home: NextPageWithLayout = () => {
       setNewFileId(fileId)
       PostUploadFile(file, fileId)
       setTimeout(() => {
-        setSucces(true)
         cleanState()
       }, 1000)
     } catch (err) {

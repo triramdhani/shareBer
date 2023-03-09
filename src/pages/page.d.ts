@@ -6,4 +6,9 @@ export type NextPageWithLayout<P = {}> = NextPage<P> & {
   layout?: ComponentType
 }
 
-export type IFileDownload = {}
+export type GetFileProp = {
+  createdAt: string
+  fileId: string
+  storageUrl: string
+  urlFile: string
+}
