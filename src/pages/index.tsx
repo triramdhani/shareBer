@@ -78,7 +78,7 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Easyshare Alpha</title>
+        <title>Easyshare Beta</title>
         <meta name='description' content='Easy share easy Earn' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
